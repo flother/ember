@@ -37,7 +37,7 @@ async def tile(request):
     tile_data = cursor.fetchone()
     if tile_data is None:
         return PlainTextResponse(
-            f"/{provider}/{z}/{x}/{y}.{format} not found'", status_code=404
+            f"/{provider}/{z}/{x}/{y}.{format} not found", status_code=404
         )
 
     return Response(content=tile_data[0], media_type="image/png")
