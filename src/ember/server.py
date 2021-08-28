@@ -7,6 +7,7 @@ from starlette.responses import PlainTextResponse, Response
 from starlette.routing import Route
 import uvicorn
 
+
 TILE_FORMATS = {
     "pbf": "application/x-protobuf",
     "png": "image/png",
