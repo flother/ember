@@ -54,7 +54,11 @@ app = Starlette(
 
 
 def run():
-    parser = argparse.ArgumentParser(allow_abbrev=False)
+    parser = argparse.ArgumentParser(
+        description="Web server for vector map tiles stored in the MBTiles format",
+        epilog="<https://github.com/flother/ember>",
+        allow_abbrev=False,
+    )
     parser.add_argument(
         "-c",
         "--config",
