@@ -1,6 +1,8 @@
 import argparse
 import configparser
+import pathlib
 import sqlite3
+import sys
 
 from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse, Response
@@ -52,12 +54,24 @@ app = Starlette(
 
 
 def run():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("config", type=argparse.FileType("r"))
+    parser = argparse.ArgumentParser(allow_abbrev=False)
+    parser.add_argument(
+        "-c",
+        "--config",
+        type=pathlib.Path,
+        default=pathlib.Path("layers.ini"),
+        help="load layer definitions from configuration file",
+        metavar="FILE",
+    )
     args = parser.parse_args()
 
+    if not args.config.exists():
+        sys.exit(f"{sys.argv[0]}: no file '{args.config}'")
+    if args.config.is_dir():
+        sys.exit(f"{sys.argv[0]}: '{args.config}' is a directory")
+
     config = configparser.ConfigParser()
-    config.read_file(args.config)
+    config.read(args.config)
     app.state.layers = dict(config["layers"])
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
