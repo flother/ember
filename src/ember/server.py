@@ -30,9 +30,8 @@ async def tile(request):
     conn = sqlite3.connect(app.state.providers[provider])
     cursor = conn.cursor()
     cursor.execute(
-        f"""
-        SELECT tile_data FROM tiles WHERE zoom_level = {z} and tile_column = {x} and tile_row = {y}
-    """
+        "SELECT tile_data FROM tiles WHERE zoom_level = ? and tile_column = ? and tile_row = ?",
+        (z, x, y),
     )
     tile_data = cursor.fetchone()
     if tile_data is None:
