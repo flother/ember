@@ -27,7 +27,7 @@ async def tile(request):
     if format not in TILE_FORMATS:
         return PlainTextResponse(f"unknown format '{format}'", status_code=404)
 
-    conn = sqlite3.connect(app.state.providers[provider])
+    conn = sqlite3.connect(f"file:{app.state.providers[provider]}?mode=ro", uri=True)
     cursor = conn.cursor()
     cursor.execute(
         "SELECT tile_data FROM tiles WHERE zoom_level = ? and tile_column = ? and tile_row = ?",
