@@ -67,6 +67,18 @@ def run():
         help="load layer definitions from configuration file",
         metavar="FILE",
     )
+    parser.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="bind server to this host",
+    )
+    parser.add_argument(
+        "-p",
+        "--port",
+        type=int,
+        default=8000,
+        help="bind server to this port",
+    )
     args = parser.parse_args()
 
     if not args.config.exists():
@@ -78,4 +90,4 @@ def run():
     config.read(args.config)
     app.state.layers = dict(config["layers"])
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=args.host, port=args.port)
