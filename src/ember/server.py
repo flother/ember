@@ -55,7 +55,7 @@ app = Starlette(
 
 def run():
     parser = argparse.ArgumentParser(
-        description="Web server for vector map tiles stored in the MBTiles format",
+        description="Web server for map tiles stored in MBTiles files",
         epilog="<https://github.com/flother/ember>",
         allow_abbrev=False,
     )
