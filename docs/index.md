@@ -1,0 +1,3 @@
+# Ember documentation
+
+Hello world!

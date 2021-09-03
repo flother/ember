@@ -1,0 +1,13 @@
+site_name: Ember
+site_description: Ember is a Web server written in Python 3 that serves vector and raster map tiles from MBTiles files
+repo_url: https://github.com/flother/ember
+nav:
+    - Overview: 'index.md'
+markdown_extensions:
+  - smarty
+  - admonition
+theme:
+  name: material
+  font: false
+  features:
+    - navigation.tabs
