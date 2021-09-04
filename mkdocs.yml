@@ -9,5 +9,8 @@ markdown_extensions:
 theme:
   name: material
   font: false
+  logo: assets/images/logo48.png
+  favicon: assets/images/logo48.png
   features:
     - navigation.tabs
+copyright: <a href="https://icons8.com/icon/18515/fire">Fire icon</a> from <a href="https://icons8.com/">Icons8</a>
