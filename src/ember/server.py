@@ -1,7 +1,6 @@
 import argparse
 import configparser
 import pathlib
-import sqlite3
 import sys
 
 from starlette.applications import Starlette
@@ -9,48 +8,55 @@ from starlette.responses import PlainTextResponse, Response
 from starlette.routing import Route
 import uvicorn
 
-
-TILE_FORMATS = {
-    "pbf": "application/x-protobuf",
-    "png": "image/png",
-    "jpg": "image/jpeg",
-    "webp": "image/webp",
-}
+from .tileset import TileNotFound, Tileset
 
 
 async def tile(request):
-    layer = request.path_params["layer"]
+    tileset_name = request.path_params["tileset"]
+    z = request.path_params["z"]
     x = request.path_params["x"]
     y = request.path_params["y"]
-    z = request.path_params["z"]
     format = request.path_params["format"]
 
-    if layer not in app.state.layers:
-        return PlainTextResponse(f"unknown layer '{layer}'", status_code=404)
-    if format not in TILE_FORMATS:
-        return PlainTextResponse(f"unknown format '{format}'", status_code=404)
-
-    conn = sqlite3.connect(f"file:{app.state.layers[layer]}?mode=ro", uri=True)
-    cursor = conn.cursor()
-    cursor.execute(
-        "SELECT tile_data FROM tiles WHERE zoom_level = ? and tile_column = ? and tile_row = ?",
-        (z, x, y),
-    )
-    tile_data = cursor.fetchone()
-    if tile_data is None:
+    if tileset_name not in app.state.tilesets:
+        return PlainTextResponse(f"unknown tileset '{tileset_name}'", status_code=404)
+    tileset = app.state.tilesets[tileset_name]
+    if format != tileset.metadata.format:
         return PlainTextResponse(
-            f"/{layer}/{z}/{x}/{y}.{format} not found", status_code=404
+            "Tiles in tileset '{}' are {} not {}".format(
+                tileset_name,
+                tileset.metadata.format,
+                format,
+            ),
+            status_code=404,
         )
 
-    return Response(content=tile_data[0], media_type="image/png")
+    try:
+        tile_data = app.state.tilesets[tileset_name].get_tile(z, x, y)
+    except TileNotFound:
+        return PlainTextResponse(
+            f"/{tileset_name}/{z}/{x}/{y}.{format} not found", status_code=404
+        )
+
+    return Response(content=tile_data, media_type=tileset.media_type())
 
 
 app = Starlette(
     debug=True,
     routes=[
-        Route("/{layer}/{z:int}/{x:int}/{y:int}.{format}", tile, name="tile"),
+        Route("/{tileset}/{z:int}/{x:int}/{y:int}.{format}", tile, name="tile"),
     ],
 )
+
+
+def parse_config(path: pathlib.Path):
+    config = configparser.ConfigParser()
+    config.read(path)
+    return config
+
+
+def parse_tilesets(config):
+    return {name: Tileset(filename) for name, filename in config.items("tilesets")}
 
 
 def run():
@@ -63,8 +69,8 @@ def run():
         "-c",
         "--config",
         type=pathlib.Path,
-        default=pathlib.Path("layers.ini"),
-        help="load layer definitions from configuration file",
+        default=pathlib.Path("tilesets.ini"),
+        help="load tileset definitions from configuration file",
         metavar="FILE",
     )
     parser.add_argument(
@@ -86,8 +92,7 @@ def run():
     if args.config.is_dir():
         sys.exit(f"{sys.argv[0]}: '{args.config}' is a directory")
 
-    config = configparser.ConfigParser()
-    config.read(args.config)
-    app.state.layers = dict(config["layers"])
+    config = parse_config(args.config)
+    app.state.tilesets = parse_tilesets(config)
 
     uvicorn.run(app, host=args.host, port=args.port)
