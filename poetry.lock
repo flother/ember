@@ -138,7 +138,7 @@ contextvars = {version = ">=2.1", markers = "python_version < \"3.7\""}
 
 [[package]]
 name = "starlette"
-version = "0.16.0"
+version = "0.17.0"
 description = "The little ASGI library that shines."
 category = "main"
 optional = false
@@ -150,7 +150,7 @@ contextlib2 = {version = ">=21.6.0", markers = "python_version < \"3.7\""}
 typing-extensions = {version = "*", markers = "python_version < \"3.8\""}
 
 [package.extras]
-full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests", "graphene"]
+full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests"]
 
 [[package]]
 name = "typing-extensions"
@@ -192,7 +192,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.6.2"
-content-hash = "6955f11ba141ee66756d1cfa4b57b58a9479c5fc7a5d3f2fd468fde32d63c150"
+content-hash = "ceeced5199fac4b36abf4e68b1635811b8fd0a77fd0415da586cb927c731bda1"
 
 [metadata.files]
 anyio = [
@@ -268,8 +268,8 @@ sniffio = [
     {file = "sniffio-1.2.0.tar.gz", hash = "sha256:c4666eecec1d3f50960c6bdf61ab7bc350648da6c126e3cf6898d8cd4ddcd3de"},
 ]
 starlette = [
-    {file = "starlette-0.16.0-py3-none-any.whl", hash = "sha256:38eb24bf705a2c317e15868e384c1b8a12ca396e5a3c3a003db7e667c43f939f"},
-    {file = "starlette-0.16.0.tar.gz", hash = "sha256:e1904b5d0007aee24bdd3c43994be9b3b729f4f58e740200de1d623f8c3a8870"},
+    {file = "starlette-0.17.0-py3-none-any.whl", hash = "sha256:64ffd950183d474df2cf7a4018c8bbb31a481367691c70f5ace4b2d376235f72"},
+    {file = "starlette-0.17.0.tar.gz", hash = "sha256:31a889e7d7bf487f70d9d197ed7efadb47fa938c58626ed93e381480833c5b84"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.0-py2-none-any.whl", hash = "sha256:0ac0f89795dd19de6b97debb0c6af1c70987fd80a2d62d1958f7e56fcc31b497"},
