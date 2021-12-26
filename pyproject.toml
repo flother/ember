@@ -17,7 +17,7 @@ packages = [{ include = "ember", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.6.2"
-starlette = "^0.17.0"
+starlette = "^0.17.1"
 uvicorn = "^0.16.0"
 
 [build-system]
